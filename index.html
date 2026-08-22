@@ -628,10 +628,8 @@
                             <p style="font-size:0.9rem; color:#cbd5e1;">Recording & Screenshot restricted.</p>
                         </div>
                         
-                        <!-- Video Frame -->
                         <iframe id="mainVideoPlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         
-                        <!-- Shields for YouTube Logo & Header -->
                         <div class="shield-top"></div>
                         <div class="shield-bottom-right"></div>
                     </div>
@@ -983,6 +981,7 @@
         window.addEventListener('focus', () => { const s = document.getElementById("screenShield"); if (s) s.style.display = "none"; });
 
         document.addEventListener("DOMContentLoaded", async () => {
+            renderCourseCards(dynamicCourses);
             await listenToSettings();
             await listenToPaymentQrCode();
             await loadAdminSecuritySettings();
@@ -1097,9 +1096,22 @@
             try {
                 const snapshot = await db.collection("site_courses").get();
                 if (!snapshot.empty) {
-                    snapshot.forEach(doc => { courseMap.set(doc.id, { key: doc.id, ...doc.data() }); });
+                    snapshot.forEach(doc => { 
+                        const data = doc.data();
+                        courseMap.set(doc.id, { 
+                            key: doc.id, 
+                            title: data.title || "Untitled Course",
+                            desc: data.desc || "व्यावहारिक र पूर्ण ज्ञानसहितको कोर्स",
+                            origPrice: data.origPrice || 1000,
+                            offerPrice: data.offerPrice || 0,
+                            icon: data.icon || "fas fa-laptop-code",
+                            ...data 
+                        }); 
+                    });
                 }
-            } catch (err) {}
+            } catch (err) {
+                console.error("Firestore Error:", err);
+            }
             dynamicCourses = Array.from(courseMap.values());
             renderCourseCards(dynamicCourses);
             if (isAdminLoggedIn) renderAdminCoursesList();
@@ -1123,10 +1135,11 @@
             }
 
             coursesList.forEach(c => {
+                const title = c.title || "Course";
                 const origPrice = Number(c.origPrice) || 1000;
                 const offerPrice = Number(c.offerPrice) || 0;
-                const discount = Math.round(((origPrice - offerPrice) / origPrice) * 100);
-                const descSafe = (c.desc || '').replace(/'/g, "\\'");
+                const discount = origPrice > offerPrice ? Math.round(((origPrice - offerPrice) / origPrice) * 100) : 0;
+                const descSafe = (c.desc || 'व्यावहारिक र पूर्ण ज्ञानसहितको कोर्स').replace(/'/g, "\\'");
                 const iconClass = c.icon || 'fas fa-laptop-code';
 
                 container.innerHTML += `
@@ -1136,14 +1149,14 @@
                             <i class="${iconClass}"></i>
                         </div>
                         <div class="course-content">
-                            <h3>${c.title}</h3>
+                            <h3>${title}</h3>
                             <p>${c.desc || 'व्यावहारिक र पूर्ण ज्ञानसहितको कोर्स'}</p>
                             <div class="course-footer">
                                 <div class="pricing-box">
                                     <del>रु. ${origPrice}</del>
                                     <strong>रु. ${offerPrice}</strong>
                                 </div>
-                                <button class="btn-auth" style="background:#089981;" onclick="handleCourseClick('${c.title.replace(/'/g, "\\'")}', '${c.key}', ${offerPrice}, ${origPrice}, '${descSafe}')">
+                                <button class="btn-auth" style="background:#089981;" onclick="handleCourseClick('${title.replace(/'/g, "\\'")}', '${c.key}', ${offerPrice}, ${origPrice}, '${descSafe}')">
                                     <i class="fas fa-shopping-cart"></i> Enroll Now
                                 </button>
                             </div>
@@ -1151,7 +1164,7 @@
                     </div>`;
 
                 if (lessonSelect) {
-                    lessonSelect.innerHTML += `<option value="${c.key}">${c.title}</option>`;
+                    lessonSelect.innerHTML += `<option value="${c.key}">${title}</option>`;
                 }
             });
         }
