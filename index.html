@@ -307,7 +307,27 @@
             color: #64748b;
         }
 
-        /* SECURE PLAYER & ANTI-SCREENSHOT */
+        /* QR CODE DISPLAY STYLES */
+        .qr-display-container {
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .qr-display-img {
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin: 0.5rem auto;
+            display: block;
+        }
+
+        /* SECURE PLAYER */
         .player-layout { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.2rem; }
         .video-container {
             position: relative;
@@ -490,56 +510,90 @@
         </div>
     </div>
 
-    <!-- COURSE CHECKOUT MODAL -->
+    <!-- ADVANCED STUDENT ENROLLMENT & CHECKOUT MODAL -->
     <div id="checkoutModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 680px;">
             <div class="modal-header">
-                <h2 id="checkoutCourseTitle">Course Checkout</h2>
+                <h2 id="checkoutCourseTitle">Student Enrollment & Checkout</h2>
                 <button class="btn-close-modal" onclick="closeModal('checkoutModal')">&times;</button>
             </div>
             
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1.2rem; border-radius: 8px; margin-bottom: 1rem;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                    <span>कोर्स:</span>
+            <!-- COURSE SUMMARY -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 8px; margin-bottom: 1.2rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span>छानिएको कोर्स:</span>
                     <strong id="summaryCourseName" style="color:var(--dark);">-</strong>
                 </div>
-                <div id="summaryCourseDescArea" style="background:#ffffff; border:1px solid #e2e8f0; padding:0.7rem; border-radius:6px; margin: 8px 0; font-size:0.92rem; color:#475569; white-space: pre-line;"></div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                    <span>वास्तविक मूल्य (Full Price):</span>
+                <div id="summaryCourseDescArea" style="background:#ffffff; border:1px solid #e2e8f0; padding:0.6rem; border-radius:6px; margin: 6px 0; font-size:0.88rem; color:#475569; white-space: pre-line;"></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span>वास्तविक मूल्य:</span>
                     <span id="summaryOriginalPrice" style="text-decoration: line-through; color:#ef4444; font-weight:700;">-</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:1.2rem; border-top:1px solid #e2e8f0; padding-top:8px; margin-top:6px;">
-                    <strong>अफर मूल्य (Payable):</strong>
+                <div style="display:flex; justify-content:space-between; font-size:1.15rem; border-top:1px solid #e2e8f0; padding-top:6px; margin-top:4px;">
+                    <strong>भुक्तानी गर्नुपर्ने रकम:</strong>
                     <strong id="summaryPayablePrice" style="color:#089981;">-</strong>
                 </div>
             </div>
 
-            <div>
-                <label style="font-weight:600; font-size:0.95rem; margin-bottom:4px; display:block;">कूपन कोड छ? (Coupon Code):</label>
-                <div style="display:flex; gap:0.5rem; margin-bottom:0.8rem;">
-                    <input type="text" id="couponInput" style="flex:1; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; text-transform:uppercase;" placeholder="उदा: ARUN50">
-                    <button class="btn-auth" onclick="applyCoupon()">Apply</button>
+            <!-- MANDATORY STUDENT DETAILS FORM -->
+            <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 1.2rem; border-radius: 8px; margin-bottom: 1.2rem;">
+                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.8rem;">
+                    <i class="fas fa-user-graduate"></i> १. विद्यार्थीको अनिवार्य विवरण (Student Details)
+                </h3>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div>
+                        <label style="font-weight:600; font-size:0.88rem;">पूरा नाम (Full Name) *</label>
+                        <input type="text" id="enrollStudentName" placeholder="तपाईंको पूरा नाम" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
+                    </div>
+                    <div>
+                        <label style="font-weight:600; font-size:0.88rem;">ईमेल ठेगाना (Email ID) *</label>
+                        <input type="email" id="enrollStudentEmail" placeholder="example@gmail.com" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
+                    </div>
                 </div>
-                <div id="couponMsg" style="font-size:0.9rem; margin-bottom:1rem;"></div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label style="font-weight:600; font-size:0.88rem;">ठेगाना (Full Address / District) *</label>
+                        <input type="text" id="enrollStudentAddress" placeholder="उदा: बुटवल, रुपन्देही" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
+                    </div>
+                    <div>
+                        <label style="font-weight:600; font-size:0.88rem;">WhatsApp / Phone Number *</label>
+                        <input type="tel" id="enrollStudentPhone" placeholder="९८xxxxxxxx" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
+                    </div>
+                </div>
             </div>
 
+            <!-- COUPON CODE SYSTEM -->
+            <div style="margin-bottom: 1.2rem;">
+                <label style="font-weight:600; font-size:0.9rem; margin-bottom:4px; display:block;">कूपन कोड छ? (Coupon Code):</label>
+                <div style="display:flex; gap:0.5rem;">
+                    <input type="text" id="couponInput" style="flex:1; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; text-transform:uppercase;" placeholder="उदा: ARUN50">
+                    <button class="btn-auth" onclick="applyCoupon()">Apply Coupon</button>
+                </div>
+                <div id="couponMsg" style="font-size:0.9rem; margin-top:4px;"></div>
+            </div>
+
+            <!-- PAYMENT QR CODE & INSTRUCTIONS -->
             <div style="border-top:1px solid #e2e8f0; padding-top:1rem;">
-                <h4 style="margin-bottom:0.5rem; color:var(--dark);"><i class="fas fa-wallet"></i> भुक्तानी गर्ने माध्यम:</h4>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem; margin: 1rem 0;">
-                    <div style="border:1px solid #cbd5e1; padding:0.8rem; border-radius:8px; text-align:center; background:#f8fafc;">
-                        <strong style="color:#60bb46; font-size:1.1rem;"><i class="fas fa-mobile-alt"></i> eSewa</strong>
-                        <p style="font-weight:700; margin-top:4px;">९८५७०६९०५८</p>
-                        <small style="color:#64748b;">(Arun Adhikari)</small>
+                <h3 style="color: var(--dark); font-size: 1.1rem; margin-bottom: 0.5rem;">
+                    <i class="fas fa-qrcode" style="color:#089981;"></i> २. स्क्यान गरी रकम भुक्तानी गर्नुहोस्
+                </h3>
+                
+                <div class="qr-display-container">
+                    <div id="qrCodeImageWrapper">
+                        <img id="checkoutQrImage" src="https://via.placeholder.com/220?text=Scan+to+Pay" alt="Payment QR Code" class="qr-display-img">
                     </div>
-                    <div style="border:1px solid #cbd5e1; padding:0.8rem; border-radius:8px; text-align:center; background:#f8fafc;">
-                        <strong style="color:#5c2d91; font-size:1.1rem;"><i class="fas fa-wallet"></i> Khalti</strong>
-                        <p style="font-weight:700; margin-top:4px;">९८५७०६९०५८</p>
-                        <small style="color:#64748b;">(Arun Adhikari)</small>
-                    </div>
+                    <p id="checkoutQrNote" style="font-weight:700; color:var(--dark); margin-top:6px;">eSewa / Khalti / Mobile Banking QR</p>
+                    <small style="color:#64748b;">(Account Holder: Arun Adhikari - 9857069058)</small>
                 </div>
 
-                <button class="btn-auth" style="width:100%; justify-content:center; background:#25d366; font-size:1.05rem; padding:0.8rem;" onclick="sendWhatsAppConfirmation()">
-                    <i class="fab fa-whatsapp"></i> भुक्तानीको Screenshot पठाउनुहोस्
+                <div style="background:#fef3c7; border:1px solid #fde68a; padding:0.8rem; border-radius:6px; font-size:0.88rem; color:#92400e; margin-bottom:1rem;">
+                    📌 <strong>भुक्तानी पछि:</strong> रकम पठाएको Screenshot तलको WhatsApp बटन थिचेर पठाउनुहोस्। तपाईंको विवरण दर्ता भई Admin ले Access Approve गर्नेछ।
+                </div>
+
+                <button class="btn-auth" style="width:100%; justify-content:center; background:#25d366; font-size:1.05rem; padding:0.85rem;" onclick="processEnrollmentAndWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> विवरण दर्ता गरी Screenshot पठाउनुहोस्
                 </button>
             </div>
         </div>
@@ -663,6 +717,7 @@
                 <button class="admin-tab-btn active" onclick="switchAdminTab('students', this)"><i class="fas fa-users"></i> Students</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('courses', this)"><i class="fas fa-book"></i> Courses & Pricing</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('lessons', this)"><i class="fas fa-video"></i> Upload Lessons</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('paymentqr', this)"><i class="fas fa-qrcode"></i> Payment QR Code</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('coupons', this)"><i class="fas fa-tags"></i> Coupons</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('notice', this)"><i class="fas fa-bullhorn"></i> Site & Photo Notice</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('security', this)"><i class="fas fa-key"></i> Change Password</button>
@@ -674,9 +729,9 @@
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Student</th>
-                            <th>Email</th>
-                            <th>Devices</th>
+                            <th>Student Name</th>
+                            <th>Email & Phone</th>
+                            <th>Address</th>
                             <th>Course Approvals</th>
                             <th>Actions</th>
                         </tr>
@@ -731,7 +786,29 @@
                 </button>
             </div>
 
-            <!-- TAB 4: COUPONS -->
+            <!-- TAB 4: PAYMENT QR CODE MANAGER (FREE FILE UPLOAD) -->
+            <div id="adminTabPaymentQR" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0; max-width: 550px;">
+                <h3 style="margin-bottom:0.8rem; color:var(--dark);"><i class="fas fa-qrcode" style="color:#089981;"></i> Manage Payment QR Code</h3>
+                <p style="color:#64748b; font-size:0.9rem; margin-bottom:1rem;">विद्यार्थीहरूले भुक्तानी गर्दा देखिने eSewa/Khalti/Bank QR Code को फोटो यहाँबाट अपलोड गर्नुहोस्।</p>
+                
+                <div style="margin-bottom:10px;">
+                    <label style="font-weight:600; font-size:0.9rem;">QR Code Photo (तस्विर फाइल छान्नुहोस्):</label>
+                    <input type="file" id="adminQrFile" accept="image/*" style="width:100%; padding:0.5rem; background:#ffffff; border:1px dashed #cbd5e1; border-radius:6px; margin-top:4px;">
+                    <input type="hidden" id="adminExistingQrUrl">
+                    <small id="adminQrStatus" style="color:#2563eb; font-weight:600; display:block; margin-top:4px;"></small>
+                </div>
+
+                <div style="margin-bottom:12px;">
+                    <label style="font-weight:600; font-size:0.9rem;">QR Note / Account Title:</label>
+                    <input type="text" id="adminQrNote" placeholder="उदा: eSewa / Khalti QR (Arun Adhikari - 9857069058)" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:4px;">
+                </div>
+
+                <button class="btn-auth" style="background:#089981; width:100%; justify-content:center; padding:0.75rem;" onclick="savePaymentQrFromAdmin()">
+                    <i class="fas fa-save"></i> Save & Update Payment QR
+                </button>
+            </div>
+
+            <!-- TAB 5: COUPONS -->
             <div id="adminTabCoupons" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 style="margin-bottom:0.8rem;"><i class="fas fa-tags"></i> Create Promo Code</h3>
                 <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:10px; margin-bottom:10px;">
@@ -743,7 +820,7 @@
                 <div id="adminCouponsList" style="margin-top:6px;"></div>
             </div>
 
-            <!-- TAB 5: NOTICES & POPUP -->
+            <!-- TAB 6: NOTICES & POPUP -->
             <div id="adminTabNotice" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 style="margin-bottom:0.8rem;"><i class="fas fa-bullhorn"></i> Top Notice Banner</h3>
                 <input type="text" id="adminNoticeInput" placeholder="Top Banner Text..." style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-bottom:10px;">
@@ -765,7 +842,7 @@
                 </div>
             </div>
 
-            <!-- TAB 6: SECURITY -->
+            <!-- TAB 7: SECURITY -->
             <div id="adminTabSecurity" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0; max-width:500px;">
                 <h3 style="margin-bottom:0.8rem;"><i class="fas fa-key"></i> Change Admin Password</h3>
                 <input type="text" id="adminNewUsernameInput" placeholder="New Username" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-bottom:8px;">
@@ -836,6 +913,7 @@
             await loadAdminSecuritySettings();
             await loadCoursesFromFirebase();
             await checkAndDisplayPhotoNotice();
+            await loadPaymentQrCodeSettings();
         });
 
         async function listenToSettings() {
@@ -866,6 +944,49 @@
                     setTimeout(() => { document.getElementById("photoNoticeModal").style.display = "flex"; }, 1000);
                 }
             } catch(e) {}
+        }
+
+        async function loadPaymentQrCodeSettings() {
+            try {
+                const doc = await db.collection("settings").doc("payment_qr").get();
+                if (doc.exists) {
+                    const d = doc.data();
+                    if (d.qrImage) document.getElementById("checkoutQrImage").src = d.qrImage;
+                    if (d.note) document.getElementById("checkoutQrNote").innerText = d.note;
+                    document.getElementById("adminExistingQrUrl").value = d.qrImage || "";
+                    document.getElementById("adminQrNote").value = d.note || "";
+                    const status = document.getElementById("adminQrStatus");
+                    if (d.qrImage) status.innerText = "QR Code अनलाइनमा सुरक्षित छ ✅";
+                }
+            } catch(e) {}
+        }
+
+        async function savePaymentQrFromAdmin() {
+            const fileInput = document.getElementById("adminQrFile");
+            const note = document.getElementById("adminQrNote").value.trim();
+            const status = document.getElementById("adminQrStatus");
+            let qrImg = document.getElementById("adminExistingQrUrl").value;
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if (file.size > 2 * 1024 * 1024) { alert("कृपया २ MB भन्दा सानो साइजको QR Code तस्विर छान्नुहोस्!"); return; }
+                status.innerText = "QR कोड प्रोसेसिङ हुँदैछ... कृपया पर्खनुहोस्।";
+                qrImg = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+                document.getElementById("adminExistingQrUrl").value = qrImg;
+            }
+
+            await db.collection("settings").doc("payment_qr").set({
+                qrImage: qrImg,
+                note: note || "eSewa / Khalti / Mobile Banking QR"
+            });
+
+            status.innerText = "✅ QR कोड सफलतापूर्वक सुरक्षित भयो!";
+            alert("✅ Payment QR Code सफलतापूर्वक अपडेट भयो!");
+            loadPaymentQrCodeSettings();
         }
 
         async function loadAdminSecuritySettings() {
@@ -946,6 +1067,11 @@
 
             if (user) {
                 authBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout (${user.displayName ? user.displayName.split(' ')[0] : 'Student'})`;
+                
+                // Prefill enrollment form if student logged in
+                document.getElementById("enrollStudentName").value = user.displayName || "";
+                document.getElementById("enrollStudentEmail").value = user.email || "";
+
                 db.collection("users").doc(user.uid).onSnapshot((doc) => {
                     if (doc.exists) {
                         currentUserData = doc.data();
@@ -1043,21 +1169,28 @@
 
         async function handleCourseClick(title, key, offerPrice, origPrice, desc) {
             if (isAdminLoggedIn) { openCoursePlayer(key, title); return; }
-            if (!currentUser) { initiatePurchase(title, key, offerPrice, origPrice, desc); return; }
-            const isEnrolled = currentUserData && currentUserData.enrolledCourses && currentUserData.enrolledCourses.includes(key);
-            if (isEnrolled) openCoursePlayer(key, title);
-            else initiatePurchase(title, key, offerPrice, origPrice, desc);
+            if (currentUser && currentUserData && currentUserData.enrolledCourses && currentUserData.enrolledCourses.includes(key)) {
+                openCoursePlayer(key, title);
+                return;
+            }
+            initiatePurchase(title, key, offerPrice, origPrice, desc);
         }
 
         function initiatePurchase(title, key, offerPrice, origPrice, desc) {
             activeCheckout = { title: title, key: key, desc: desc, originalPrice: origPrice, currentPrice: offerPrice, appliedCoupon: null };
-            document.getElementById("checkoutCourseTitle").innerText = title;
+            document.getElementById("checkoutCourseTitle").innerText = "Enroll: " + title;
             document.getElementById("summaryCourseName").innerText = title;
             document.getElementById("summaryCourseDescArea").innerText = desc || "व्यावहारिक पूर्ण कक्षा";
             document.getElementById("summaryOriginalPrice").innerText = "रु. " + origPrice;
             document.getElementById("summaryPayablePrice").innerText = "रु. " + offerPrice;
             document.getElementById("couponInput").value = "";
             document.getElementById("couponMsg").innerHTML = "";
+
+            if (currentUser) {
+                document.getElementById("enrollStudentName").value = currentUser.displayName || "";
+                document.getElementById("enrollStudentEmail").value = currentUser.email || "";
+            }
+
             document.getElementById("checkoutModal").style.display = "flex";
         }
 
@@ -1076,9 +1209,36 @@
             }
         }
 
-        function sendWhatsAppConfirmation() {
-            const userEmail = currentUser ? currentUser.email : "Not Logged In";
-            const text = `Namaste Arun Sir!%0Aम यो कोर्स खरिद गर्न चाहन्छु:%0A- कोर्स: *${activeCheckout.title}*%0A- भुक्तानी रकम: *रु. ${activeCheckout.currentPrice}*%0A- कूपन: *${activeCheckout.appliedCoupon || 'None'}*%0A- मेरो Email: *${userEmail}*%0A%0Aभुक्तानीको Screenshot पठाउँदैछु।`;
+        // ENROLLMENT PROCESS WITH MANDATORY STUDENT DETAILS & WHATSAPP
+        async function processEnrollmentAndWhatsApp() {
+            const name = document.getElementById("enrollStudentName").value.trim();
+            const email = document.getElementById("enrollStudentEmail").value.trim();
+            const address = document.getElementById("enrollStudentAddress").value.trim();
+            const phone = document.getElementById("enrollStudentPhone").value.trim();
+
+            if (!name || !email || !address || !phone) {
+                alert("⚠️ कृपया विद्यार्थीको पूरा नाम, ईमेल, ठेगाना, र फोन नम्बर अनिवार्य भर्नुहोस्!");
+                return;
+            }
+
+            // Save enrollment application to Firebase
+            try {
+                await db.collection("enrollments").add({
+                    studentName: name,
+                    studentEmail: email,
+                    studentAddress: address,
+                    studentPhone: phone,
+                    courseKey: activeCheckout.key,
+                    courseTitle: activeCheckout.title,
+                    payableAmount: activeCheckout.currentPrice,
+                    couponUsed: activeCheckout.appliedCoupon || 'None',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch(e) {
+                console.log("Enrollment save error:", e);
+            }
+
+            const text = `Namaste Arun Sir!%0Aम यो कोर्सको लागि भर्ना (Enroll) हुन चाहन्छु:%0A%0A*विद्यार्थीको विवरण:*%0A- नाम: *${name}*%0A- Email: *${email}*%0A- ठेगाना: *${address}*%0A- Phone/WhatsApp: *${phone}*%0A%0A*कोर्सको विवरण:*%0A- कोर्स: *${activeCheckout.title}*%0A- भुक्तानी रकम: *रु. ${activeCheckout.currentPrice}*%0A- कूपन: *${activeCheckout.appliedCoupon || 'None'}*%0A%0Aमैले QR मा भुक्तानी गरेको Screenshot यसैसँग पठाएको छु। कृपया मेरो कोर्स Verify गरेर Access Approve गरिदिनुहोला।`;
             window.open(`https://wa.me/9779857069058?text=${text}`, '_blank');
         }
 
@@ -1188,6 +1348,7 @@
             if (tabName === 'students') { document.getElementById("adminTabStudents").style.display = "block"; openAdminPanel(); }
             if (tabName === 'courses') { document.getElementById("adminTabCourses").style.display = "block"; renderAdminCoursesList(); }
             if (tabName === 'lessons') { document.getElementById("adminTabLessons").style.display = "block"; loadCoursesFromFirebase(); }
+            if (tabName === 'paymentqr') { document.getElementById("adminTabPaymentQR").style.display = "block"; loadPaymentQrCodeSettings(); }
             if (tabName === 'coupons') { document.getElementById("adminTabCoupons").style.display = "block"; loadAdminCoupons(); }
             if (tabName === 'notice') { document.getElementById("adminTabNotice").style.display = "block"; }
             if (tabName === 'security') {
@@ -1224,8 +1385,8 @@
                 tbody.innerHTML += `
                     <tr>
                         <td><strong>${u.name}</strong></td>
-                        <td>${u.email}</td>
-                        <td><small>PC: ${dev.desktop ? '✅' : '❌'}</small><br><small>Mob: ${dev.mobile ? '✅' : '❌'}</small></td>
+                        <td>${u.email}<br><small>${u.phone || '-'}</small></td>
+                        <td>${u.address || 'Not Provided'}</td>
                         <td>${togglesHtml}</td>
                         <td><button class="btn-reset" onclick="resetUserDevices('${uid}')">Reset Device</button></td>
                     </tr>`;
