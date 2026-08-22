@@ -269,10 +269,10 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.75);
-            z-index: 2000;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 9999;
             align-items: center;
             justify-content: center;
             padding: 15px;
@@ -341,7 +341,7 @@
 
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        /* YouTube Click Shields */
+        /* YouTube Shields */
         .shield-top {
             position: absolute;
             top: 0;
@@ -628,10 +628,10 @@
                             <p style="font-size:0.9rem; color:#cbd5e1;">Recording & Screenshot restricted.</p>
                         </div>
                         
-                        <!-- Player Frame -->
+                        <!-- Video Frame -->
                         <iframe id="mainVideoPlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         
-                        <!-- Transparent Shields for YouTube Logo & Header -->
+                        <!-- Shields for YouTube Logo & Header -->
                         <div class="shield-top"></div>
                         <div class="shield-bottom-right"></div>
                     </div>
@@ -1108,18 +1108,31 @@
         function renderCourseCards(coursesList) {
             const container = document.getElementById("coursesCardsContainer");
             const lessonSelect = document.getElementById("uploadCourseSelect");
+            
+            if (!container) return;
             container.innerHTML = "";
             if (lessonSelect) lessonSelect.innerHTML = "";
 
+            if (!coursesList || coursesList.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align:center; padding: 2rem; color:#64748b;">
+                        <i class="fas fa-search" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:10px;"></i>
+                        <p>माफ गर्नुहोस्, खोजिएको कोर्स फेला परेन।</p>
+                    </div>`;
+                return;
+            }
+
             coursesList.forEach(c => {
-                const discount = Math.round(((c.origPrice - c.offerPrice) / c.origPrice) * 100);
+                const origPrice = Number(c.origPrice) || 1000;
+                const offerPrice = Number(c.offerPrice) || 0;
+                const discount = Math.round(((origPrice - offerPrice) / origPrice) * 100);
                 const descSafe = (c.desc || '').replace(/'/g, "\\'");
                 const iconClass = c.icon || 'fas fa-laptop-code';
 
                 container.innerHTML += `
                     <div class="course-card">
                         <div class="course-badge-header">
-                            <span class="discount-pill">${discount}% OFF</span>
+                            <span class="discount-pill">${discount > 0 ? discount + '% OFF' : 'OFFER'}</span>
                             <i class="${iconClass}"></i>
                         </div>
                         <div class="course-content">
@@ -1127,10 +1140,10 @@
                             <p>${c.desc || 'व्यावहारिक र पूर्ण ज्ञानसहितको कोर्स'}</p>
                             <div class="course-footer">
                                 <div class="pricing-box">
-                                    <del>रु. ${c.origPrice}</del>
-                                    <strong>रु. ${c.offerPrice}</strong>
+                                    <del>रु. ${origPrice}</del>
+                                    <strong>रु. ${offerPrice}</strong>
                                 </div>
-                                <button class="btn-auth" style="background:#089981;" onclick="handleCourseClick('${c.title.replace(/'/g, "\\'")}', '${c.key}', ${c.offerPrice}, ${c.origPrice}, '${descSafe}')">
+                                <button class="btn-auth" style="background:#089981;" onclick="handleCourseClick('${c.title.replace(/'/g, "\\'")}', '${c.key}', ${offerPrice}, ${origPrice}, '${descSafe}')">
                                     <i class="fas fa-shopping-cart"></i> Enroll Now
                                 </button>
                             </div>
@@ -1144,8 +1157,18 @@
         }
 
         function filterCourses() {
-            const query = document.getElementById("courseSearchInput").value.toLowerCase();
-            const filtered = dynamicCourses.filter(c => c.title.toLowerCase().includes(query) || (c.desc && c.desc.toLowerCase().includes(query)));
+            const searchInput = document.getElementById("courseSearchInput");
+            const query = (searchInput ? searchInput.value : "").trim().toLowerCase();
+            
+            if (!query) {
+                renderCourseCards(dynamicCourses);
+                return;
+            }
+
+            const filtered = dynamicCourses.filter(c => 
+                (c.title && c.title.toLowerCase().includes(query)) || 
+                (c.desc && c.desc.toLowerCase().includes(query))
+            );
             renderCourseCards(filtered);
         }
 
@@ -1161,10 +1184,11 @@
             if (user) {
                 authBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout (${user.displayName ? user.displayName.split(' ')[0] : 'Student'})`;
                 
-                document.getElementById("enrollStudentName").value = user.displayName || "";
-                document.getElementById("enrollStudentEmail").value = user.email || "";
+                const nameField = document.getElementById("enrollStudentName");
+                const emailField = document.getElementById("enrollStudentEmail");
+                if (nameField) nameField.value = user.displayName || "";
+                if (emailField) emailField.value = user.email || "";
 
-                // सुनिश्चित गर्ने: विद्यार्थी users collection मा दर्ता छ
                 const userRef = db.collection("users").doc(user.uid);
                 const userDoc = await userRef.get();
                 if (!userDoc.exists) {
@@ -1274,7 +1298,10 @@
         }
 
         async function handleCourseClick(title, key, offerPrice, origPrice, desc) {
-            if (isAdminLoggedIn) { openCoursePlayer(key, title); return; }
+            if (isAdminLoggedIn) { 
+                openCoursePlayer(key, title); 
+                return; 
+            }
             if (currentUser && currentUserData && currentUserData.enrolledCourses && currentUserData.enrolledCourses.includes(key)) {
                 openCoursePlayer(key, title);
                 return;
@@ -1283,23 +1310,43 @@
         }
 
         function initiatePurchase(title, key, offerPrice, origPrice, desc) {
-            activeCheckout = { title: title, key: key, desc: desc, originalPrice: origPrice, currentPrice: offerPrice, appliedCoupon: null };
-            document.getElementById("checkoutCourseTitle").innerText = "Enroll: " + title;
-            document.getElementById("summaryCourseName").innerText = title;
-            document.getElementById("summaryCourseDescArea").innerText = desc || "व्यावहारिक पूर्ण कक्षा";
-            document.getElementById("summaryOriginalPrice").innerText = "रु. " + origPrice;
-            document.getElementById("summaryPayablePrice").innerText = "रु. " + offerPrice;
-            document.getElementById("couponInput").value = "";
-            document.getElementById("couponMsg").innerHTML = "";
-            document.getElementById("enrollPaymentProofFile").value = "";
-            document.getElementById("enrollUploadStatus").innerText = "";
+            activeCheckout = { 
+                title: title || 'Course', 
+                key: key || 'general', 
+                desc: desc || '', 
+                originalPrice: origPrice || offerPrice, 
+                currentPrice: offerPrice || 0, 
+                appliedCoupon: null 
+            };
+
+            const modalTitle = document.getElementById("checkoutCourseTitle");
+            const sName = document.getElementById("summaryCourseName");
+            const sDesc = document.getElementById("summaryCourseDescArea");
+            const sOrig = document.getElementById("summaryOriginalPrice");
+            const sPay = document.getElementById("summaryPayablePrice");
+
+            if (modalTitle) modalTitle.innerText = "Enroll: " + title;
+            if (sName) sName.innerText = title;
+            if (sDesc) sDesc.innerText = desc || "व्यावहारिक पूर्ण कक्षा";
+            if (sOrig) sOrig.innerText = "रु. " + (origPrice || offerPrice);
+            if (sPay) sPay.innerText = "रु. " + offerPrice;
+
+            if (document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
+            if (document.getElementById("couponMsg")) document.getElementById("couponMsg").innerHTML = "";
+            if (document.getElementById("enrollPaymentProofFile")) document.getElementById("enrollPaymentProofFile").value = "";
+            if (document.getElementById("enrollUploadStatus")) document.getElementById("enrollUploadStatus").innerText = "";
 
             if (currentUser) {
-                document.getElementById("enrollStudentName").value = currentUser.displayName || "";
-                document.getElementById("enrollStudentEmail").value = currentUser.email || "";
+                const sNameInput = document.getElementById("enrollStudentName");
+                const sEmailInput = document.getElementById("enrollStudentEmail");
+                if (sNameInput) sNameInput.value = currentUser.displayName || "";
+                if (sEmailInput) sEmailInput.value = currentUser.email || "";
             }
 
-            document.getElementById("checkoutModal").style.display = "flex";
+            const checkoutModal = document.getElementById("checkoutModal");
+            if (checkoutModal) {
+                checkoutModal.style.display = "flex";
+            }
         }
 
         async function applyCoupon() {
@@ -1353,7 +1400,6 @@
                     reader.readAsDataURL(file);
                 });
 
-                // १. नयाँ आवेदन थप्ने
                 await db.collection("enrollments").add({
                     studentName: name,
                     studentEmail: email,
@@ -1370,7 +1416,6 @@
                     dateText: new Date().toLocaleString()
                 });
 
-                // २. Users collection मा पनि विद्यार्थीको रेकर्ड सिङ्क गर्ने
                 if (currentUser) {
                     await db.collection("users").doc(currentUser.uid).set({
                         name: name,
@@ -1758,7 +1803,7 @@
             }
         }
 
-        // ================= LESSONS CRUD (UPLOAD, EDIT, DELETE) =================
+        // LESSONS CRUD
         async function loadAdminLessons() {
             const courseKey = document.getElementById("uploadCourseSelect").value;
             const list = document.getElementById("adminLessonsList");
@@ -1846,9 +1891,7 @@
 
             if (!title || !url) { alert("शीर्षक र भिडियो लिङ्क भर्नुहोस्!"); return; }
 
-            const lessonData = {
-                order, title, vid: url, resourceUrl, desc
-            };
+            const lessonData = { order, title, vid: url, resourceUrl, desc };
 
             if (editingLessonId) {
                 await db.collection("courses").doc(courseKey).collection("lessons").doc(editingLessonId).update({
@@ -1926,7 +1969,8 @@
         }
 
         function closeModal(id) {
-            document.getElementById(id).style.display = "none";
+            const el = document.getElementById(id);
+            if (el) el.style.display = "none";
             if (id === 'courseModal') document.getElementById("mainVideoPlayer").src = "";
         }
     </script>
