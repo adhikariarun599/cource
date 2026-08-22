@@ -327,7 +327,7 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* SECURE PLAYER WITH YOUTUBE CLICK SHIELDS */
+        /* SECURE PLAYER */
         .player-layout { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.2rem; }
         .video-container {
             position: relative;
@@ -341,7 +341,6 @@
 
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        /* YouTube Shields */
         .shield-top {
             position: absolute;
             top: 0;
@@ -981,7 +980,7 @@
         window.addEventListener('focus', () => { const s = document.getElementById("screenShield"); if (s) s.style.display = "none"; });
 
         document.addEventListener("DOMContentLoaded", async () => {
-            renderCourseCards(dynamicCourses);
+            renderCourseCards(BASE_DEFAULT_COURSES);
             await listenToSettings();
             await listenToPaymentQrCode();
             await loadAdminSecuritySettings();
@@ -1091,16 +1090,15 @@
         }
 
         async function loadCoursesFromFirebase() {
-            let courseMap = new Map();
-            BASE_DEFAULT_COURSES.forEach(c => courseMap.set(c.key, c));
+            let coursesToDisplay = [];
             try {
                 const snapshot = await db.collection("site_courses").get();
                 if (!snapshot.empty) {
                     snapshot.forEach(doc => { 
                         const data = doc.data();
-                        courseMap.set(doc.id, { 
+                        coursesToDisplay.push({ 
                             key: doc.id, 
-                            title: data.title || "Untitled Course",
+                            title: data.title || doc.id,
                             desc: data.desc || "व्यावहारिक र पूर्ण ज्ञानसहितको कोर्स",
                             origPrice: data.origPrice || 1000,
                             offerPrice: data.offerPrice || 0,
@@ -1112,7 +1110,13 @@
             } catch (err) {
                 console.error("Firestore Error:", err);
             }
-            dynamicCourses = Array.from(courseMap.values());
+
+            if (coursesToDisplay.length > 0) {
+                dynamicCourses = coursesToDisplay;
+            } else {
+                dynamicCourses = [...BASE_DEFAULT_COURSES];
+            }
+
             renderCourseCards(dynamicCourses);
             if (isAdminLoggedIn) renderAdminCoursesList();
         }
@@ -1126,12 +1130,7 @@
             if (lessonSelect) lessonSelect.innerHTML = "";
 
             if (!coursesList || coursesList.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align:center; padding: 2rem; color:#64748b;">
-                        <i class="fas fa-search" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:10px;"></i>
-                        <p>माफ गर्नुहोस्, खोजिएको कोर्स फेला परेन।</p>
-                    </div>`;
-                return;
+                coursesList = BASE_DEFAULT_COURSES;
             }
 
             coursesList.forEach(c => {
