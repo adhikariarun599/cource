@@ -510,11 +510,11 @@
         </div>
     </div>
 
-    <!-- ADVANCED STUDENT ENROLLMENT & CHECKOUT MODAL -->
+    <!-- ADVANCED STUDENT ENROLLMENT & DIRECT PAYMENT SCREENSHOT CHECKOUT MODAL -->
     <div id="checkoutModal" class="modal">
         <div class="modal-content" style="max-width: 680px;">
             <div class="modal-header">
-                <h2 id="checkoutCourseTitle">Student Enrollment & Checkout</h2>
+                <h2 id="checkoutCourseTitle">Student Enrollment & Verification</h2>
                 <button class="btn-close-modal" onclick="closeModal('checkoutModal')">&times;</button>
             </div>
             
@@ -538,27 +538,27 @@
             <!-- MANDATORY STUDENT DETAILS FORM -->
             <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 1.2rem; border-radius: 8px; margin-bottom: 1.2rem;">
                 <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.8rem;">
-                    <i class="fas fa-user-graduate"></i> १. विद्यार्थीको अनिवार्य विवरण (Student Details)
+                    <i class="fas fa-user-graduate"></i> १. विद्यार्थीको विवरण (Student Details)
                 </h3>
                 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
                     <div>
-                        <label style="font-weight:600; font-size:0.88rem;">पूरा नाम (Full Name) *</label>
+                        <label style="font-weight:600; font-size:0.88rem;">पूरा नाम (Full Name) <span style="color:#ef4444;">*</span></label>
                         <input type="text" id="enrollStudentName" placeholder="तपाईंको पूरा नाम" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
                     </div>
                     <div>
-                        <label style="font-weight:600; font-size:0.88rem;">ईमेल ठेगाना (Email ID) *</label>
+                        <label style="font-weight:600; font-size:0.88rem;">ईमेल ठेगाना (Email ID) <span style="color:#ef4444;">*</span></label>
                         <input type="email" id="enrollStudentEmail" placeholder="example@gmail.com" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
                     </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <div>
-                        <label style="font-weight:600; font-size:0.88rem;">ठेगाना (Full Address / District) *</label>
+                        <label style="font-weight:600; font-size:0.88rem;">ठेगाना (Address / District) <span style="color:#ef4444;">*</span></label>
                         <input type="text" id="enrollStudentAddress" placeholder="उदा: बुटवल, रुपन्देही" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
                     </div>
                     <div>
-                        <label style="font-weight:600; font-size:0.88rem;">WhatsApp / Phone Number *</label>
+                        <label style="font-weight:600; font-size:0.88rem;">WhatsApp / Phone Number <span style="color:#ef4444;">*</span></label>
                         <input type="tel" id="enrollStudentPhone" placeholder="९८xxxxxxxx" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
                     </div>
                 </div>
@@ -574,8 +574,8 @@
                 <div id="couponMsg" style="font-size:0.9rem; margin-top:4px;"></div>
             </div>
 
-            <!-- PAYMENT QR CODE & INSTRUCTIONS -->
-            <div style="border-top:1px solid #e2e8f0; padding-top:1rem;">
+            <!-- PAYMENT QR CODE -->
+            <div style="border-top:1px solid #e2e8f0; padding-top:1rem; margin-bottom: 1.2rem;">
                 <h3 style="color: var(--dark); font-size: 1.1rem; margin-bottom: 0.5rem;">
                     <i class="fas fa-qrcode" style="color:#089981;"></i> २. स्क्यान गरी रकम भुक्तानी गर्नुहोस्
                 </h3>
@@ -587,15 +587,23 @@
                     <p id="checkoutQrNote" style="font-weight:700; color:var(--dark); margin-top:6px;">eSewa / Khalti / Mobile Banking QR</p>
                     <small style="color:#64748b;">(Account Holder: Arun Adhikari - 9857069058)</small>
                 </div>
-
-                <div style="background:#fef3c7; border:1px solid #fde68a; padding:0.8rem; border-radius:6px; font-size:0.88rem; color:#92400e; margin-bottom:1rem;">
-                    📌 <strong>भुक्तानी पछि:</strong> रकम पठाएको Screenshot तलको WhatsApp बटन थिचेर पठाउनुहोस्। तपाईंको विवरण दर्ता भई Admin ले Access Approve गर्नेछ।
-                </div>
-
-                <button class="btn-auth" style="width:100%; justify-content:center; background:#25d366; font-size:1.05rem; padding:0.85rem;" onclick="processEnrollmentAndWhatsApp()">
-                    <i class="fab fa-whatsapp"></i> विवरण दर्ता गरी Screenshot पठाउनुहोस्
-                </button>
             </div>
+
+            <!-- MANDATORY PAYMENT SCREENSHOT UPLOAD -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 1.2rem; border-radius: 8px; margin-bottom: 1.2rem;">
+                <h3 style="color: #1e3a8a; font-size: 1.05rem; margin-bottom: 0.4rem;">
+                    <i class="fas fa-receipt"></i> ३. भुक्तानीको Screenshot अपलोड गर्नुहोस् <span style="color:#ef4444;">* (अनिवार्य)</span>
+                </h3>
+                <p style="font-size:0.85rem; color:#475569; margin-bottom:0.6rem;">रकम भुक्तानी गरिसकेपछि प्राप्त भएको Success Screenshot तस्विर यहाँ छान्नुहोस्।</p>
+                
+                <input type="file" id="enrollPaymentProofFile" accept="image/*" style="width:100%; padding:0.6rem; background:#ffffff; border:1px dashed #3b82f6; border-radius:6px;">
+                <small id="enrollUploadStatus" style="color:#2563eb; font-weight:700; display:block; margin-top:4px;"></small>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button id="btnSubmitEnrollment" class="btn-auth" style="width:100%; justify-content:center; background:#089981; font-size:1.1rem; padding:0.85rem;" onclick="processCompleteDirectEnrollment()">
+                <i class="fas fa-paper-plane"></i> Submit & Complete Enrollment
+            </button>
         </div>
     </div>
 
@@ -714,7 +722,8 @@
             </div>
 
             <div class="admin-nav-bar">
-                <button class="admin-tab-btn active" onclick="switchAdminTab('students', this)"><i class="fas fa-users"></i> Students</button>
+                <button class="admin-tab-btn active" onclick="switchAdminTab('pending_enrollments', this)"><i class="fas fa-receipt" style="color:#10b981;"></i> Pending Verifications (<span id="pendingCountBadge">0</span>)</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('students', this)"><i class="fas fa-users"></i> All Students</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('courses', this)"><i class="fas fa-book"></i> Courses & Pricing</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('lessons', this)"><i class="fas fa-video"></i> Upload Lessons</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('paymentqr', this)"><i class="fas fa-qrcode"></i> Payment QR Code</button>
@@ -724,8 +733,25 @@
                 <button class="admin-tab-btn" style="background:#fee2e2; color:#b91c1c; margin-left:auto;" onclick="logoutAdmin()"><i class="fas fa-power-off"></i> Logout</button>
             </div>
 
-            <!-- TAB 1: STUDENTS -->
-            <div id="adminTabStudents" class="admin-tab-pane" style="overflow-x: auto;">
+            <!-- TAB 0: PENDING ENROLLMENTS WITH PROOF SCREENSHOT -->
+            <div id="adminTabPending" class="admin-tab-pane" style="overflow-x: auto;">
+                <h3 style="margin-bottom:0.6rem; color:var(--dark);"><i class="fas fa-user-clock"></i> New Student Payment Verifications</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Applied Date</th>
+                            <th>Student Info</th>
+                            <th>Course & Amount</th>
+                            <th>Payment Screenshot</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminPendingTableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- TAB 1: ALL ENROLLED STUDENTS -->
+            <div id="adminTabStudents" class="admin-tab-pane" style="display:none; overflow-x: auto;">
                 <table class="admin-table">
                     <thead>
                         <tr>
@@ -786,10 +812,9 @@
                 </button>
             </div>
 
-            <!-- TAB 4: PAYMENT QR CODE MANAGER (FREE FILE UPLOAD) -->
+            <!-- TAB 4: PAYMENT QR CODE MANAGER -->
             <div id="adminTabPaymentQR" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0; max-width: 550px;">
                 <h3 style="margin-bottom:0.8rem; color:var(--dark);"><i class="fas fa-qrcode" style="color:#089981;"></i> Manage Payment QR Code</h3>
-                <p style="color:#64748b; font-size:0.9rem; margin-bottom:1rem;">विद्यार्थीहरूले भुक्तानी गर्दा देखिने eSewa/Khalti/Bank QR Code को फोटो यहाँबाट अपलोड गर्नुहोस्।</p>
                 
                 <div style="margin-bottom:10px;">
                     <label style="font-weight:600; font-size:0.9rem;">QR Code Photo (तस्विर फाइल छान्नुहोस्):</label>
@@ -849,6 +874,14 @@
                 <input type="password" id="adminNewPasswordInput" placeholder="New Secret Password" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-bottom:12px;">
                 <button class="btn-auth" style="width:100%; justify-content:center;" onclick="updateAdminCredentialsFromPanel()"><i class="fas fa-lock"></i> Save Credentials</button>
             </div>
+        </div>
+    </div>
+
+    <!-- FULL PHOTO PREVIEW MODAL -->
+    <div id="imagePreviewModal" class="modal" style="z-index: 3500;" onclick="closeModal('imagePreviewModal')">
+        <div style="max-width: 90%; max-height: 90%; text-align: center;">
+            <img id="fullImagePreviewSrc" src="" style="max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <p style="color:white; margin-top:8px;">क्लिक गरेर बन्द गर्नुहोस्</p>
         </div>
     </div>
 
@@ -1068,7 +1101,6 @@
             if (user) {
                 authBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout (${user.displayName ? user.displayName.split(' ')[0] : 'Student'})`;
                 
-                // Prefill enrollment form if student logged in
                 document.getElementById("enrollStudentName").value = user.displayName || "";
                 document.getElementById("enrollStudentEmail").value = user.email || "";
 
@@ -1099,6 +1131,7 @@
                 adminNav.style.display = "block";
                 adminLoginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout Admin`;
                 document.getElementById("myCoursesNavTab").style.display = "block";
+                loadPendingEnrollmentsBadge();
             } else {
                 adminNav.style.display = "none";
                 adminLoginBtn.innerHTML = `<i class="fas fa-lock"></i> Admin`;
@@ -1185,6 +1218,8 @@
             document.getElementById("summaryPayablePrice").innerText = "रु. " + offerPrice;
             document.getElementById("couponInput").value = "";
             document.getElementById("couponMsg").innerHTML = "";
+            document.getElementById("enrollPaymentProofFile").value = "";
+            document.getElementById("enrollUploadStatus").innerText = "";
 
             if (currentUser) {
                 document.getElementById("enrollStudentName").value = currentUser.displayName || "";
@@ -1209,37 +1244,79 @@
             }
         }
 
-        // ENROLLMENT PROCESS WITH MANDATORY STUDENT DETAILS & WHATSAPP
-        async function processEnrollmentAndWhatsApp() {
+        // COMPLETE DIRECT ENROLLMENT WITH PAYMENT SCREENSHOT (BASE64 UPLOAD)
+        async function processCompleteDirectEnrollment() {
             const name = document.getElementById("enrollStudentName").value.trim();
             const email = document.getElementById("enrollStudentEmail").value.trim();
             const address = document.getElementById("enrollStudentAddress").value.trim();
             const phone = document.getElementById("enrollStudentPhone").value.trim();
+            const proofFileInput = document.getElementById("enrollPaymentProofFile");
+            const status = document.getElementById("enrollUploadStatus");
+            const submitBtn = document.getElementById("btnSubmitEnrollment");
 
             if (!name || !email || !address || !phone) {
                 alert("⚠️ कृपया विद्यार्थीको पूरा नाम, ईमेल, ठेगाना, र फोन नम्बर अनिवार्य भर्नुहोस्!");
                 return;
             }
 
-            // Save enrollment application to Firebase
+            if (proofFileInput.files.length === 0) {
+                alert("⚠️ कृपया भुक्तानी गरेको Success Screenshot तस्विर अनिवार्य छान्नुहोस्!");
+                return;
+            }
+
+            const file = proofFileInput.files[0];
+            if (file.size > 2.5 * 1024 * 1024) {
+                alert("⚠️ Screenshot तस्विरको साइज २.५ MB भन्दा सानो हुनुपर्छ!");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> सबमिट हुँदैछ... कृपया पर्खनुहोस्`;
+            status.innerText = "तस्विर प्रोसेसिङ भइरहेको छ...";
+
             try {
+                const proofBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+
+                // 1. Save enrollment request with proof image
                 await db.collection("enrollments").add({
                     studentName: name,
-                    studentEmail: email,
+                    studentEmail: email.toLowerCase(),
                     studentAddress: address,
                     studentPhone: phone,
                     courseKey: activeCheckout.key,
                     courseTitle: activeCheckout.title,
                     payableAmount: activeCheckout.currentPrice,
                     couponUsed: activeCheckout.appliedCoupon || 'None',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    proofImage: proofBase64,
+                    status: 'pending',
+                    userUid: currentUser ? currentUser.uid : null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    dateText: new Date().toLocaleString()
                 });
-            } catch(e) {
-                console.log("Enrollment save error:", e);
-            }
 
-            const text = `Namaste Arun Sir!%0Aम यो कोर्सको लागि भर्ना (Enroll) हुन चाहन्छु:%0A%0A*विद्यार्थीको विवरण:*%0A- नाम: *${name}*%0A- Email: *${email}*%0A- ठेगाना: *${address}*%0A- Phone/WhatsApp: *${phone}*%0A%0A*कोर्सको विवरण:*%0A- कोर्स: *${activeCheckout.title}*%0A- भुक्तानी रकम: *रु. ${activeCheckout.currentPrice}*%0A- कूपन: *${activeCheckout.appliedCoupon || 'None'}*%0A%0Aमैले QR मा भुक्तानी गरेको Screenshot यसैसँग पठाएको छु। कृपया मेरो कोर्स Verify गरेर Access Approve गरिदिनुहोला।`;
-            window.open(`https://wa.me/9779857069058?text=${text}`, '_blank');
+                // 2. Ensure User Document Exists in Firestore
+                if (currentUser) {
+                    await db.collection("users").doc(currentUser.uid).set({
+                        name: name,
+                        email: email.toLowerCase(),
+                        phone: phone,
+                        address: address
+                    }, { merge: true });
+                }
+
+                alert("🎉 बधाई छ! तपाईंको भर्ना आवेदन र भुक्तानी रसिद सफलतापूर्वक सबमिट भयो।\n\nAdmin ले रसिद Verify गरेपछि तपाईंको खातामा कोर्स तुरुन्तै सुरु हुनेछ।");
+                closeModal('checkoutModal');
+            } catch (err) {
+                alert("सबमिट गर्न समस्या आयो: " + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fas fa-paper-plane"></i> Submit & Complete Enrollment`;
+                status.innerText = "";
+            }
         }
 
         // PLAYER
@@ -1345,7 +1422,8 @@
             document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
             if (btn) btn.classList.add("active");
 
-            if (tabName === 'students') { document.getElementById("adminTabStudents").style.display = "block"; openAdminPanel(); }
+            if (tabName === 'pending_enrollments') { document.getElementById("adminTabPending").style.display = "block"; loadPendingEnrollmentsTable(); }
+            if (tabName === 'students') { document.getElementById("adminTabStudents").style.display = "block"; loadAllStudentsTable(); }
             if (tabName === 'courses') { document.getElementById("adminTabCourses").style.display = "block"; renderAdminCoursesList(); }
             if (tabName === 'lessons') { document.getElementById("adminTabLessons").style.display = "block"; loadCoursesFromFirebase(); }
             if (tabName === 'paymentqr') { document.getElementById("adminTabPaymentQR").style.display = "block"; loadPaymentQrCodeSettings(); }
@@ -1361,6 +1439,112 @@
         async function openAdminPanel() {
             if (!isAdminLoggedIn) { openAdminAuthModal(); return; }
             document.getElementById("adminModal").style.display = "flex";
+            switchAdminTab('pending_enrollments');
+        }
+
+        // PENDING ENROLLMENTS TABLE & APPROVAL ENGINE
+        async function loadPendingEnrollmentsTable() {
+            const tbody = document.getElementById("adminPendingTableBody");
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">लोड हुँदैछ...</td></tr>`;
+
+            const snapshot = await db.collection("enrollments").where("status", "==", "pending").get();
+            tbody.innerHTML = "";
+            document.getElementById("pendingCountBadge").innerText = snapshot.size;
+
+            if (snapshot.empty) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:#64748b;">कुनै पनि नयाँ भुक्तानी बाँकी छैन ✅</td></tr>`;
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const en = doc.data();
+                const eid = doc.id;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><small>${en.dateText || 'Recent'}</small></td>
+                        <td>
+                            <strong>${en.studentName}</strong><br>
+                            <small>📧 ${en.studentEmail}</small><br>
+                            <small>📞 ${en.studentPhone}</small><br>
+                            <small>📍 ${en.studentAddress}</small>
+                        </td>
+                        <td>
+                            <strong>${en.courseTitle}</strong><br>
+                            <span style="color:#089981; font-weight:700;">रु. ${en.payableAmount}</span><br>
+                            <small style="color:#64748b;">Coupon: ${en.couponUsed}</small>
+                        </td>
+                        <td style="text-align:center;">
+                            ${en.proofImage ? `
+                                <img src="${en.proofImage}" style="max-width:80px; max-height:80px; border-radius:4px; border:1px solid #cbd5e1; cursor:pointer;" onclick="previewProofImage('${en.proofImage}')">
+                                <br><small style="color:#2563eb; cursor:pointer;" onclick="previewProofImage('${en.proofImage}')"><i class="fas fa-search-plus"></i> View Full</small>
+                            ` : '<span style="color:#ef4444;">No Image</span>'}
+                        </td>
+                        <td>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <button class="btn-auth" style="background:#089981; padding:0.4rem 0.6rem; font-size:0.8rem;" onclick="approvePendingEnrollment('${eid}', '${en.studentEmail}', '${en.courseKey}', '${en.userUid || ''}')">
+                                    <i class="fas fa-check-circle"></i> Approve Access
+                                </button>
+                                <button class="btn-reset" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="rejectPendingEnrollment('${eid}')">
+                                    <i class="fas fa-trash"></i> Reject
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        async function loadPendingEnrollmentsBadge() {
+            try {
+                const snapshot = await db.collection("enrollments").where("status", "==", "pending").get();
+                document.getElementById("pendingCountBadge").innerText = snapshot.size;
+            } catch(e) {}
+        }
+
+        function previewProofImage(src) {
+            document.getElementById("fullImagePreviewSrc").src = src;
+            document.getElementById("imagePreviewModal").style.display = "flex";
+        }
+
+        async function approvePendingEnrollment(enrollmentId, studentEmail, courseKey, userUid) {
+            if (!confirm(`के तपाईं यो विद्यार्थीलाई '${courseKey}' कोर्सको Access दिन निश्चित हुनुहुन्छ?`)) return;
+
+            try {
+                // 1. Update enrollment doc status
+                await db.collection("enrollments").doc(enrollmentId).update({ status: "approved" });
+
+                // 2. Grant course access to student in 'users' collection
+                let targetUid = userUid;
+                if (!targetUid) {
+                    const userSnap = await db.collection("users").where("email", "==", studentEmail.toLowerCase()).get();
+                    if (!userSnap.empty) targetUid = userSnap.docs[0].id;
+                }
+
+                if (targetUid) {
+                    const userRef = db.collection("users").doc(targetUid);
+                    const userDoc = await userRef.get();
+                    let enrolled = (userDoc.exists && userDoc.data().enrolledCourses) ? userDoc.data().enrolledCourses : [];
+                    if (!enrolled.includes(courseKey)) {
+                        enrolled.push(courseKey);
+                        await userRef.set({ enrolledCourses: enrolled }, { merge: true });
+                    }
+                }
+
+                alert("✅ कोर्स सफलतापूर्वक Approve गरियो!");
+                loadPendingEnrollmentsTable();
+            } catch(e) {
+                alert("Approval Error: " + e.message);
+            }
+        }
+
+        async function rejectPendingEnrollment(enrollmentId) {
+            if (confirm("के तपाईं यो आवेदन खारेज गर्न चाहनुहुन्छ?")) {
+                await db.collection("enrollments").doc(enrollmentId).delete();
+                loadPendingEnrollmentsTable();
+            }
+        }
+
+        async function loadAllStudentsTable() {
             const tbody = document.getElementById("adminUserTableBody");
             tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">लोड हुँदैछ...</td></tr>`;
 
@@ -1370,7 +1554,6 @@
                 const u = doc.data();
                 const uid = doc.id;
                 const enrolled = u.enrolledCourses || [];
-                const dev = u.devices || {};
 
                 let togglesHtml = '<div style="display:flex; flex-wrap:wrap; gap:4px;">';
                 dynamicCourses.forEach(c => {
@@ -1384,7 +1567,7 @@
 
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${u.name}</strong></td>
+                        <td><strong>${u.name || 'Student'}</strong></td>
                         <td>${u.email}<br><small>${u.phone || '-'}</small></td>
                         <td>${u.address || 'Not Provided'}</td>
                         <td>${togglesHtml}</td>
@@ -1400,14 +1583,14 @@
                 let list = doc.data().enrolledCourses || [];
                 list = list.includes(courseKey) ? list.filter(k => k !== courseKey) : [...list, courseKey];
                 await ref.update({ enrolledCourses: list });
-                openAdminPanel();
+                loadAllStudentsTable();
             }
         }
 
         async function resetUserDevices(uid) {
             if (confirm("Device Reset गर्ने?")) {
                 await db.collection("users").doc(uid).update({ "devices.desktop": null, "devices.mobile": null });
-                openAdminPanel();
+                loadAllStudentsTable();
             }
         }
 
