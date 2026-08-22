@@ -327,7 +327,7 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* SECURE PLAYER */
+        /* SECURE PLAYER WITH YOUTUBE CLICK SHIELDS */
         .player-layout { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.2rem; }
         .video-container {
             position: relative;
@@ -341,17 +341,27 @@
 
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        .video-watermark {
+        /* YouTube Click Shields */
+        .shield-top {
             position: absolute;
-            top: 15%;
-            left: 15%;
-            color: rgba(255, 255, 255, 0.22);
-            font-size: 1.1rem;
-            font-weight: 800;
-            pointer-events: none;
-            z-index: 10;
-            transform: rotate(-15deg);
-            white-space: nowrap;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: transparent;
+            z-index: 20;
+            cursor: default;
+        }
+
+        .shield-bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 110px;
+            height: 48px;
+            background: transparent;
+            z-index: 20;
+            cursor: default;
         }
 
         .screen-protect-overlay {
@@ -489,10 +499,10 @@
             </button>
         </div>
 
-        <div class="grid-container" id="coursesCardsContainer">
-            </div>
+        <div class="grid-container" id="coursesCardsContainer"></div>
     </section>
 
+    <!-- MY COURSES MODAL -->
     <div id="myCoursesModal" class="modal">
         <div class="modal-content" style="max-width: 650px;">
             <div class="modal-header">
@@ -503,6 +513,7 @@
         </div>
     </div>
 
+    <!-- ENROLLMENT & CHECKOUT MODAL -->
     <div id="checkoutModal" class="modal">
         <div class="modal-content" style="max-width: 680px;">
             <div class="modal-header">
@@ -600,6 +611,7 @@
         </div>
     </div>
 
+    <!-- COURSE VIDEO PLAYER MODAL -->
     <div id="courseModal" class="modal">
         <div class="modal-content" style="max-width: 950px;">
             <div class="modal-header">
@@ -610,13 +622,18 @@
             <div class="player-layout">
                 <div>
                     <div class="video-container">
-                        <div id="videoWatermarkText" class="video-watermark">Protected Content</div>
                         <div id="screenShield" class="screen-protect-overlay">
                             <i class="fas fa-shield-alt" style="font-size: 3rem; margin-bottom: 10px;"></i>
                             <h3>⚠️ Security Alert: Video Protected</h3>
                             <p style="font-size:0.9rem; color:#cbd5e1;">Recording & Screenshot restricted.</p>
                         </div>
+                        
+                        <!-- Player Frame -->
                         <iframe id="mainVideoPlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        
+                        <!-- Transparent Shields for YouTube Logo & Header -->
+                        <div class="shield-top"></div>
+                        <div class="shield-bottom-right"></div>
                     </div>
                     
                     <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:0.8rem; border-radius:8px; border:1px solid #e2e8f0; gap:8px;">
@@ -653,6 +670,7 @@
         </div>
     </div>
 
+    <!-- CERTIFICATE MODAL -->
     <div id="certificateModal" class="modal">
         <div class="modal-content" style="max-width: 700px; text-align:center;">
             <div class="modal-header">
@@ -687,6 +705,7 @@
         </div>
     </div>
 
+    <!-- ADMIN LOGIN MODAL -->
     <div id="adminLoginModal" class="modal">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <div class="modal-header">
@@ -703,6 +722,7 @@
         </div>
     </div>
 
+    <!-- ADMIN MANAGEMENT PANEL -->
     <div id="adminModal" class="modal">
         <div class="modal-content" style="max-width: 1100px;">
             <div class="modal-header">
@@ -722,6 +742,7 @@
                 <button class="admin-tab-btn" style="background:#fee2e2; color:#b91c1c; margin-left:auto;" onclick="logoutAdmin()"><i class="fas fa-power-off"></i> Logout</button>
             </div>
 
+            <!-- TAB: PENDING -->
             <div id="adminTabPending" class="admin-tab-pane" style="overflow-x: auto;">
                 <h3 style="margin-bottom:0.6rem; color:var(--dark);"><i class="fas fa-user-clock"></i> New Student Payment Verifications</h3>
                 <table class="admin-table">
@@ -738,6 +759,7 @@
                 </table>
             </div>
 
+            <!-- TAB: STUDENTS -->
             <div id="adminTabStudents" class="admin-tab-pane" style="display:none; overflow-x: auto;">
                 <table class="admin-table">
                     <thead>
@@ -753,6 +775,7 @@
                 </table>
             </div>
 
+            <!-- TAB: COURSES -->
             <div id="adminTabCourses" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 style="margin-bottom:0.8rem;" id="adminCourseFormHeading"><i class="fas fa-plus-circle"></i> Add / Edit Course</h3>
                 <div style="display:grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap:8px; margin-bottom:10px;">
@@ -797,6 +820,7 @@
                 <div id="adminCoursesList" style="margin-top:6px; display:flex; flex-direction:column; gap:6px;"></div>
             </div>
 
+            <!-- TAB: LESSONS -->
             <div id="adminTabLessons" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 id="adminLessonFormHeading" style="margin-bottom:0.8rem;"><i class="fas fa-plus-circle"></i> Add / Edit Lesson</h3>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
@@ -830,9 +854,9 @@
                 <div id="adminLessonsList" style="display:flex; flex-direction:column; gap:6px;"></div>
             </div>
 
+            <!-- TAB: QR CODE -->
             <div id="adminTabPaymentQR" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0; max-width: 550px;">
                 <h3 style="margin-bottom:0.8rem; color:var(--dark);"><i class="fas fa-qrcode" style="color:#089981;"></i> Manage Payment QR Code</h3>
-                
                 <div style="margin-bottom:10px;">
                     <label style="font-weight:600; font-size:0.9rem;">QR Code Photo (तस्विर फाइल छान्नुहोस्):</label>
                     <input type="file" id="adminQrFile" accept="image/*" style="width:100%; padding:0.5rem; background:#ffffff; border:1px dashed #cbd5e1; border-radius:6px; margin-top:4px;">
@@ -850,6 +874,7 @@
                 </button>
             </div>
 
+            <!-- TAB: COUPONS -->
             <div id="adminTabCoupons" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 style="margin-bottom:0.8rem;"><i class="fas fa-tags"></i> Create Promo Code</h3>
                 <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:10px; margin-bottom:10px;">
@@ -861,6 +886,7 @@
                 <div id="adminCouponsList" style="margin-top:6px;"></div>
             </div>
 
+            <!-- TAB: NOTICES -->
             <div id="adminTabNotice" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 style="margin-bottom:0.8rem;"><i class="fas fa-bullhorn"></i> Top Notice Banner</h3>
                 <input type="text" id="adminNoticeInput" placeholder="Top Banner Text..." style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-bottom:10px;">
@@ -882,6 +908,7 @@
                 </div>
             </div>
 
+            <!-- TAB: SECURITY -->
             <div id="adminTabSecurity" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0; max-width:500px;">
                 <h3 style="margin-bottom:0.8rem;"><i class="fas fa-key"></i> Change Admin Password</h3>
                 <input type="text" id="adminNewUsernameInput" placeholder="New Username" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-bottom:8px;">
@@ -891,6 +918,7 @@
         </div>
     </div>
 
+    <!-- PROOF PREVIEW MODAL -->
     <div id="imagePreviewModal" class="modal" style="z-index: 3500;" onclick="closeModal('imagePreviewModal')">
         <div style="max-width: 90%; max-height: 90%; text-align: center;">
             <img id="fullImagePreviewSrc" src="" style="max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
@@ -922,7 +950,6 @@
 
         let editingLessonId = null;
 
-        // BASE DEFAULT COURSES WITH DEFAULT ICONS
         const BASE_DEFAULT_COURSES = [
             { key: 'web_dev', title: 'Website Development', icon: 'fas fa-laptop-code', desc: 'Complete HTML, CSS, JavaScript, Responsive layout, and Firebase deployment.', origPrice: 5000, offerPrice: 999 },
             { key: 'app_dev', title: 'App Development', icon: 'fas fa-mobile-alt', desc: 'Mobile UI/UX, Flutter, and cross-platform mobile apps.', origPrice: 20000, offerPrice: 2500 },
@@ -1122,7 +1149,7 @@
             renderCourseCards(filtered);
         }
 
-        // AUTH
+        // AUTH & STUDENT USER REGISTRATION SYNC
         auth.onAuthStateChanged(async (user) => {
             currentUser = user;
             const authBtn = document.getElementById("authBtn");
@@ -1137,7 +1164,20 @@
                 document.getElementById("enrollStudentName").value = user.displayName || "";
                 document.getElementById("enrollStudentEmail").value = user.email || "";
 
-                db.collection("users").doc(user.uid).onSnapshot((doc) => {
+                // सुनिश्चित गर्ने: विद्यार्थी users collection मा दर्ता छ
+                const userRef = db.collection("users").doc(user.uid);
+                const userDoc = await userRef.get();
+                if (!userDoc.exists) {
+                    await userRef.set({
+                        name: user.displayName || "Student",
+                        email: (user.email || "").toLowerCase(),
+                        enrolledCourses: [],
+                        devices: { desktop: true, mobile: false },
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                }
+
+                userRef.onSnapshot((doc) => {
                     if (doc.exists) {
                         currentUserData = doc.data();
                         const enrolled = currentUserData.enrolledCourses || [];
@@ -1279,7 +1319,7 @@
 
         async function processCompleteDirectEnrollment() {
             const name = document.getElementById("enrollStudentName").value.trim();
-            const email = document.getElementById("enrollStudentEmail").value.trim();
+            const email = document.getElementById("enrollStudentEmail").value.trim().toLowerCase();
             const address = document.getElementById("enrollStudentAddress").value.trim();
             const phone = document.getElementById("enrollStudentPhone").value.trim();
             const proofFileInput = document.getElementById("enrollPaymentProofFile");
@@ -1313,9 +1353,10 @@
                     reader.readAsDataURL(file);
                 });
 
+                // १. नयाँ आवेदन थप्ने
                 await db.collection("enrollments").add({
                     studentName: name,
-                    studentEmail: email.toLowerCase(),
+                    studentEmail: email,
                     studentAddress: address,
                     studentPhone: phone,
                     courseKey: activeCheckout.key,
@@ -1329,16 +1370,31 @@
                     dateText: new Date().toLocaleString()
                 });
 
+                // २. Users collection मा पनि विद्यार्थीको रेकर्ड सिङ्क गर्ने
                 if (currentUser) {
                     await db.collection("users").doc(currentUser.uid).set({
                         name: name,
-                        email: email.toLowerCase(),
+                        email: email,
                         phone: phone,
-                        address: address
+                        address: address,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     }, { merge: true });
+                } else {
+                    const existingUserSnap = await db.collection("users").where("email", "==", email).get();
+                    if (existingUserSnap.empty) {
+                        await db.collection("users").add({
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            address: address,
+                            enrolledCourses: [],
+                            devices: { desktop: true, mobile: false },
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
                 }
 
-                alert("🎉 बधाई छ! तपाईंको भर्ना आवेदन र भुक्तानी रसिद सफलतापूर्वक सबमिट भयो।\n\nAdmin ले रसिद Verify गरेपछि तपाईंको खातामा कोर्स तुरुन्तै सुरु हुनेछ।");
+                alert("🎉 बधाई छ! तपाईंको भर्ना आवेदन र भुक्तानी रसिद सफलतापूर्वक सबमिट भयो।\n\nAdmin ले रसिद Verify गरेपछि तपाईंको खातामा कोर्स सुरु हुनेछ।");
                 closeModal('checkoutModal');
             } catch (err) {
                 alert("सबमिट गर्न समस्या आयो: " + err.message);
@@ -1349,12 +1405,10 @@
             }
         }
 
-        // PLAYER
+        // PLAYER WITH YOUTUBE PARAMETERS
         async function openCoursePlayer(courseKey, title) {
             activeCourseKey = courseKey;
             document.getElementById("modalCourseTitle").innerText = title;
-            const watermarkText = currentUser ? (currentUser.email || currentUser.displayName) : (isAdminLoggedIn ? "ADMIN PREVIEW" : "Confidential");
-            document.getElementById("videoWatermarkText").innerText = watermarkText + " • Arun Adhikari Hub";
             document.getElementById("courseModal").style.display = "flex";
 
             const snapshot = await db.collection("courses").doc(courseKey).collection("lessons").orderBy("order", "asc").get();
@@ -1411,10 +1465,15 @@
             }
 
             let vidId = lesson.vid || '';
-            if (vidId.includes("watch?v=")) vidId = vidId.split("watch?v=")[1].split("&")[0];
-            else if (vidId.includes("youtu.be/")) vidId = vidId.split("youtu.be/")[1].split("?")[0];
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = vidId.match(regExp);
+            if (match && match[2].length === 11) {
+                vidId = match[2];
+            } else if (vidId.includes('/embed/')) {
+                vidId = vidId.split('/embed/')[1].split('?')[0];
+            }
 
-            document.getElementById("mainVideoPlayer").src = `https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1&modestbranding=1&rel=0`;
+            document.getElementById("mainVideoPlayer").src = `https://www.youtube.com/embed/${vidId}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3&showinfo=0`;
             renderLessonsPlaylist();
         }
 
@@ -1512,7 +1571,7 @@
                         </td>
                         <td>
                             <div style="display:flex; flex-direction:column; gap:4px;">
-                                <button class="btn-auth" style="background:#089981; padding:0.4rem 0.6rem; font-size:0.8rem;" onclick="approvePendingEnrollment('${eid}', '${en.studentEmail}', '${en.courseKey}', '${en.userUid || ''}')">
+                                <button class="btn-auth" style="background:#089981; padding:0.4rem 0.6rem; font-size:0.8rem;" onclick="approvePendingEnrollment('${eid}', '${en.studentEmail}', '${en.courseKey}', '${en.userUid || ''}', '${en.studentName}', '${en.studentPhone}', '${en.studentAddress}')">
                                     <i class="fas fa-check-circle"></i> Approve Access
                                 </button>
                                 <button class="btn-reset" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="rejectPendingEnrollment('${eid}')">
@@ -1536,7 +1595,7 @@
             document.getElementById("imagePreviewModal").style.display = "flex";
         }
 
-        async function approvePendingEnrollment(enrollmentId, studentEmail, courseKey, userUid) {
+        async function approvePendingEnrollment(enrollmentId, studentEmail, courseKey, userUid, studentName, studentPhone, studentAddress) {
             if (!confirm(`के तपाईं यो विद्यार्थीलाई '${courseKey}' कोर्सको Access दिन निश्चित हुनुहुन्छ?`)) return;
 
             try {
@@ -1545,7 +1604,20 @@
                 let targetUid = userUid;
                 if (!targetUid) {
                     const userSnap = await db.collection("users").where("email", "==", studentEmail.toLowerCase()).get();
-                    if (!userSnap.empty) targetUid = userSnap.docs[0].id;
+                    if (!userSnap.empty) {
+                        targetUid = userSnap.docs[0].id;
+                    } else {
+                        const newDoc = await db.collection("users").add({
+                            name: studentName || "Student",
+                            email: studentEmail.toLowerCase(),
+                            phone: studentPhone || "",
+                            address: studentAddress || "",
+                            enrolledCourses: [courseKey],
+                            devices: { desktop: true, mobile: false },
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        targetUid = newDoc.id;
+                    }
                 }
 
                 if (targetUid) {
