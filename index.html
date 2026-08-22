@@ -766,7 +766,7 @@
                 </table>
             </div>
 
-            <!-- TAB 2: COURSE & PRICE MANAGER -->
+            <!-- TAB 2: COURSE & PRICE & ICON MANAGER -->
             <div id="adminTabCourses" class="admin-tab-pane" style="display:none; background:#f8fafc; padding:1.2rem; border-radius:8px; border:1px solid #e2e8f0;">
                 <h3 style="margin-bottom:0.8rem;" id="adminCourseFormHeading"><i class="fas fa-plus-circle"></i> Add / Edit Course</h3>
                 <div style="display:grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap:8px; margin-bottom:10px;">
@@ -775,8 +775,32 @@
                     <input type="number" id="adminNewCourseOrigPrice" placeholder="Original Price" style="padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px;">
                     <input type="number" id="adminNewCourseOfferPrice" placeholder="Offer Price" style="padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px;">
                 </div>
+
+                <!-- DYNAMIC ICON SELECTOR & CUSTOM CLASS -->
+                <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div>
+                        <label style="font-weight:600; font-size:0.88rem;">Course Icon (आइकन छान्नुहोस्):</label>
+                        <select id="adminNewCourseIconSelect" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;" onchange="updateCustomIconField(this.value)">
+                            <option value="fas fa-laptop-code">💻 Web / Coding (fa-laptop-code)</option>
+                            <option value="fas fa-mobile-alt">📱 Mobile App (fa-mobile-alt)</option>
+                            <option value="fas fa-video">🎬 Video Editing (fa-video)</option>
+                            <option value="fas fa-palette">🎨 Graphic Design (fa-palette)</option>
+                            <option value="fas fa-chart-line">📈 Stock / Trading (fa-chart-line)</option>
+                            <option value="fas fa-coins">💰 Finance / Crypto (fa-coins)</option>
+                            <option value="fas fa-robot">🤖 AI / Python (fa-robot)</option>
+                            <option value="fas fa-graduation-cap">🎓 Academic / Education (fa-graduation-cap)</option>
+                            <option value="fas fa-briefcase">💼 Business (fa-briefcase)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-weight:600; font-size:0.88rem;">Or Custom Icon Class:</label>
+                        <input type="text" id="adminNewCourseIconCustom" placeholder="fas fa-laptop-code" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px;">
+                    </div>
+                </div>
+
                 <div style="margin-bottom:10px;">
-                    <textarea id="adminNewCourseDesc" rows="3" placeholder="कोर्सको विस्तृत विवरण..." style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit;"></textarea>
+                    <label style="font-weight:600; font-size:0.88rem;">Course Description (विस्तृत विवरण):</label>
+                    <textarea id="adminNewCourseDesc" rows="3" placeholder="कोर्सको विस्तृत विवरण..." style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; margin-top:3px; font-family:inherit;"></textarea>
                 </div>
                 <div style="display:flex; gap:8px; margin-bottom:1.5rem;">
                     <button class="btn-auth" style="background:#089981; flex:1; justify-content:center;" onclick="saveCourseFromAdmin()">
@@ -909,13 +933,14 @@
         let currentAdminPin = "Admin@12345";
         let isAdminLoggedIn = localStorage.getItem("arun_is_admin_logged") === "true";
 
+        // BASE DEFAULT COURSES WITH DEFAULT ICONS
         const BASE_DEFAULT_COURSES = [
-            { key: 'web_dev', title: 'Website Development', desc: 'Complete HTML, CSS, JavaScript, Responsive layout, and Firebase deployment.', origPrice: 5000, offerPrice: 999 },
-            { key: 'app_dev', title: 'App Development', desc: 'Mobile UI/UX, Flutter, and cross-platform mobile apps.', origPrice: 20000, offerPrice: 2500 },
-            { key: 'video_edit', title: 'Video Editing Masterclass', desc: 'Professional CapCut and DaVinci Resolve editing skills.', origPrice: 30000, offerPrice: 1499 },
-            { key: 'graphic_design', title: 'Graphic Design Pro', desc: 'Photoshop, Illustrator, social media branding and logos.', origPrice: 5000, offerPrice: 999 },
-            { key: 'tech_analysis', title: 'Technical Analysis', desc: 'NEPSE share trading charts, candlestick psychology, and indicators.', origPrice: 3000, offerPrice: 499 },
-            { key: 'fund_analysis', title: 'Fundamental Analysis', desc: 'Balance sheet, annual report, and financial ratio evaluation.', origPrice: 5000, offerPrice: 499 }
+            { key: 'web_dev', title: 'Website Development', icon: 'fas fa-laptop-code', desc: 'Complete HTML, CSS, JavaScript, Responsive layout, and Firebase deployment.', origPrice: 5000, offerPrice: 999 },
+            { key: 'app_dev', title: 'App Development', icon: 'fas fa-mobile-alt', desc: 'Mobile UI/UX, Flutter, and cross-platform mobile apps.', origPrice: 20000, offerPrice: 2500 },
+            { key: 'video_edit', title: 'Video Editing Masterclass', icon: 'fas fa-video', desc: 'Professional CapCut and DaVinci Resolve editing skills.', origPrice: 30000, offerPrice: 1499 },
+            { key: 'graphic_design', title: 'Graphic Design Pro', icon: 'fas fa-palette', desc: 'Photoshop, Illustrator, social media branding and logos.', origPrice: 5000, offerPrice: 999 },
+            { key: 'tech_analysis', title: 'Technical Analysis', icon: 'fas fa-chart-line', desc: 'NEPSE share trading charts, candlestick psychology, and indicators.', origPrice: 3000, offerPrice: 499 },
+            { key: 'fund_analysis', title: 'Fundamental Analysis', icon: 'fas fa-coins', desc: 'Balance sheet, annual report, and financial ratio evaluation.', origPrice: 5000, offerPrice: 499 }
         ];
 
         let dynamicCourses = [...BASE_DEFAULT_COURSES];
@@ -948,6 +973,10 @@
             await checkAndDisplayPhotoNotice();
             await loadPaymentQrCodeSettings();
         });
+
+        function updateCustomIconField(val) {
+            document.getElementById("adminNewCourseIconCustom").value = val;
+        }
 
         async function listenToSettings() {
             db.collection("settings").doc("main").onSnapshot((doc) => {
@@ -1055,12 +1084,13 @@
             coursesList.forEach(c => {
                 const discount = Math.round(((c.origPrice - c.offerPrice) / c.origPrice) * 100);
                 const descSafe = (c.desc || '').replace(/'/g, "\\'");
+                const iconClass = c.icon || 'fas fa-laptop-code';
 
                 container.innerHTML += `
                     <div class="course-card">
                         <div class="course-badge-header">
                             <span class="discount-pill">${discount}% OFF</span>
-                            <i class="fas fa-laptop-code"></i>
+                            <i class="${iconClass}"></i>
                         </div>
                         <div class="course-content">
                             <h3>${c.title}</h3>
@@ -1281,7 +1311,6 @@
                     reader.readAsDataURL(file);
                 });
 
-                // 1. Save enrollment request with proof image
                 await db.collection("enrollments").add({
                     studentName: name,
                     studentEmail: email.toLowerCase(),
@@ -1298,7 +1327,6 @@
                     dateText: new Date().toLocaleString()
                 });
 
-                // 2. Ensure User Document Exists in Firestore
                 if (currentUser) {
                     await db.collection("users").doc(currentUser.uid).set({
                         name: name,
@@ -1510,10 +1538,8 @@
             if (!confirm(`के तपाईं यो विद्यार्थीलाई '${courseKey}' कोर्सको Access दिन निश्चित हुनुहुन्छ?`)) return;
 
             try {
-                // 1. Update enrollment doc status
                 await db.collection("enrollments").doc(enrollmentId).update({ status: "approved" });
 
-                // 2. Grant course access to student in 'users' collection
                 let targetUid = userUid;
                 if (!targetUid) {
                     const userSnap = await db.collection("users").where("email", "==", studentEmail.toLowerCase()).get();
@@ -1594,21 +1620,23 @@
             }
         }
 
+        // SAVE COURSE WITH DYNAMIC ICON FROM ADMIN PANEL
         async function saveCourseFromAdmin() {
             const title = document.getElementById("adminNewCourseTitle").value.trim();
             const key = document.getElementById("adminNewCourseKey").value.trim().toLowerCase();
             const origPrice = parseInt(document.getElementById("adminNewCourseOrigPrice").value);
             const offerPrice = parseInt(document.getElementById("adminNewCourseOfferPrice").value);
             const desc = document.getElementById("adminNewCourseDesc").value.trim();
+            const icon = document.getElementById("adminNewCourseIconCustom").value.trim() || document.getElementById("adminNewCourseIconSelect").value || 'fas fa-laptop-code';
 
             if (!title || !key || isNaN(origPrice) || isNaN(offerPrice)) { alert("सबै विवरण भर्नुहोस्!"); return; }
-            await db.collection("site_courses").doc(key).set({ title, origPrice, offerPrice, desc });
-            alert("✅ कोर्स सुरक्षित भयो!");
+            await db.collection("site_courses").doc(key).set({ title, origPrice, offerPrice, desc, icon });
+            alert("✅ कोर्स र आइकन सुरक्षित भयो!");
             resetCourseForm();
             await loadCoursesFromFirebase();
         }
 
-        function loadCourseToEdit(key, title, origPrice, offerPrice, desc) {
+        function loadCourseToEdit(key, title, origPrice, offerPrice, desc, icon) {
             document.getElementById("adminCourseFormHeading").innerText = `Edit: ${title}`;
             document.getElementById("adminNewCourseTitle").value = title;
             document.getElementById("adminNewCourseKey").value = key;
@@ -1616,6 +1644,8 @@
             document.getElementById("adminNewCourseOrigPrice").value = origPrice;
             document.getElementById("adminNewCourseOfferPrice").value = offerPrice;
             document.getElementById("adminNewCourseDesc").value = desc || "";
+            document.getElementById("adminNewCourseIconCustom").value = icon || "fas fa-laptop-code";
+            document.getElementById("adminNewCourseIconSelect").value = icon || "fas fa-laptop-code";
         }
 
         function resetCourseForm() {
@@ -1626,6 +1656,8 @@
             document.getElementById("adminNewCourseOrigPrice").value = "";
             document.getElementById("adminNewCourseOfferPrice").value = "";
             document.getElementById("adminNewCourseDesc").value = "";
+            document.getElementById("adminNewCourseIconCustom").value = "fas fa-laptop-code";
+            document.getElementById("adminNewCourseIconSelect").value = "fas fa-laptop-code";
         }
 
         function renderAdminCoursesList() {
@@ -1633,11 +1665,12 @@
             list.innerHTML = "";
             dynamicCourses.forEach(c => {
                 const descSafe = (c.desc || '').replace(/'/g, "\\'");
+                const iconSafe = (c.icon || 'fas fa-laptop-code').replace(/'/g, "\\'");
                 list.innerHTML += `
                     <div style="background:#ffffff; border:1px solid #cbd5e1; padding:0.6rem; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
-                        <div><strong>${c.title}</strong> - <span style="color:#089981;">रु. ${c.offerPrice}</span> / <del style="color:#ef4444;">रु. ${c.origPrice}</del></div>
+                        <div><i class="${c.icon || 'fas fa-laptop-code'}" style="color:#2563eb; margin-right:5px;"></i> <strong>${c.title}</strong> - <span style="color:#089981;">रु. ${c.offerPrice}</span> / <del style="color:#ef4444;">रु. ${c.origPrice}</del></div>
                         <div style="display:flex; gap:6px;">
-                            <button class="btn-auth" style="background:#2563eb; padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="loadCourseToEdit('${c.key}', '${c.title.replace(/'/g, "\\'")}', ${c.origPrice}, ${c.offerPrice}, '${descSafe}')">Edit</button>
+                            <button class="btn-auth" style="background:#2563eb; padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="loadCourseToEdit('${c.key}', '${c.title.replace(/'/g, "\\'")}', ${c.origPrice}, ${c.offerPrice}, '${descSafe}', '${iconSafe}')">Edit</button>
                             <button class="btn-reset" onclick="deleteCourseFromAdmin('${c.key}')">Delete</button>
                         </div>
                     </div>`;
