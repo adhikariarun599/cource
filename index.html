@@ -953,7 +953,7 @@
             { key: 'video_edit', title: 'Video Editing Masterclass', icon: 'fas fa-video', desc: 'Professional CapCut and DaVinci Resolve editing skills.', origPrice: 30000, offerPrice: 1499 },
             { key: 'graphic_design', title: 'Graphic Design Pro', icon: 'fas fa-palette', desc: 'Photoshop, Illustrator, social media branding and logos.', origPrice: 5000, offerPrice: 999 },
             { key: 'tech_analysis', title: 'Technical Analysis', icon: 'fas fa-chart-line', desc: 'NEPSE share trading charts, candlestick psychology, and indicators.', origPrice: 3000, offerPrice: 499 },
-            { key: 'fund_analysis', title: 'Fundamental Analysis', icon: 'fas fa-coins', desc: 'Balance sheet, annual report, and financial ratio evaluation.', origPrice: 5000, offerPrice: 3000 }
+            { key: 'ai_cource', title: 'AI Automation & Python', icon: 'fas fa-robot', desc: 'Artificial Intelligence training, automation tools, and Python applications.', origPrice: 6000, offerPrice: 3000 }
         ];
 
         let dynamicCourses = [...BASE_DEFAULT_COURSES];
@@ -1022,7 +1022,6 @@
             } catch(e) {}
         }
 
-        // REAL-TIME PAYMENT QR CODE LISTENER
         function listenToPaymentQrCode() {
             db.collection("settings").doc("payment_qr").onSnapshot((doc) => {
                 const qrImg = document.getElementById("checkoutQrImage");
@@ -1184,7 +1183,6 @@
             renderCourseCards(filtered);
         }
 
-        // AUTH & STUDENT USER REGISTRATION SYNC
         auth.onAuthStateChanged(async (user) => {
             currentUser = user;
             const authBtn = document.getElementById("authBtn");
@@ -1451,7 +1449,7 @@
                     }
                 }
 
-                alert("🎉 बधाई छ! तपाईंको भर्ना आवेदन र भुक्तानी रसिद सफलतापूर्वक सबमिट भयो।\n\nAdmin ले रसिद Verify गरेपछि तपाईंको खातामा कोर्स सुरु हुनेछ।");
+                alert("🎉 बधाई छ! तपाईंको भर्ना आवेदन र भुक्तानी रसिद सफलतापूर्वक सबमिट भयो。\n\nAdmin ले रसिद Verify गरेपछि तपाईंको खातामा कोर्स सुरु हुनेछ।");
                 closeModal('checkoutModal');
             } catch (err) {
                 alert("सबमिट गर्न समस्या आयो: " + err.message);
@@ -1462,7 +1460,6 @@
             }
         }
 
-        // PLAYER WITH YOUTUBE PARAMETERS
         async function openCoursePlayer(courseKey, title) {
             activeCourseKey = courseKey;
             document.getElementById("modalCourseTitle").innerText = title;
@@ -1588,7 +1585,6 @@
             switchAdminTab('pending_enrollments');
         }
 
-        // PENDING ENROLLMENTS TABLE & APPROVAL ENGINE
         async function loadPendingEnrollmentsTable() {
             const tbody = document.getElementById("adminPendingTableBody");
             tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">लोड हुँदैछ...</td></tr>`;
@@ -1751,7 +1747,6 @@
             }
         }
 
-        // COURSES CRUD
         async function saveCourseFromAdmin() {
             const title = document.getElementById("adminNewCourseTitle").value.trim();
             const key = document.getElementById("adminNewCourseKey").value.trim().toLowerCase();
@@ -1815,7 +1810,6 @@
             }
         }
 
-        // LESSONS CRUD
         async function loadAdminLessons() {
             const courseKey = document.getElementById("uploadCourseSelect").value;
             const list = document.getElementById("adminLessonsList");
@@ -1924,7 +1918,6 @@
             loadAdminLessons();
         }
 
-        // COUPONS
         async function saveCouponCode() {
             const code = document.getElementById("adminCouponCode").value.trim().toUpperCase();
             const percent = parseInt(document.getElementById("adminCouponPercent").value);
@@ -1943,7 +1936,6 @@
             });
         }
 
-        // NOTICES
         async function updateNoticeBanner(show) {
             const txt = document.getElementById("adminNoticeInput").value.trim();
             await db.collection("settings").doc("main").set({ showNotice: show, noticeText: txt });
@@ -1969,7 +1961,6 @@
             alert(enable ? "✅ फोटो नोटिस सक्रिय भयो!" : "❌ बन्द भयो!");
         }
 
-        // SECURITY
         async function updateAdminCredentialsFromPanel() {
             const u = document.getElementById("adminNewUsernameInput").value.trim();
             const p = document.getElementById("adminNewPasswordInput").value.trim();
